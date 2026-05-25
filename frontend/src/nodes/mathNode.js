@@ -4,6 +4,7 @@
 // same side (auto-distributed), a select-driven dynamic subtitle.
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 const OPS = [
   { value: 'add', label: '+ Add' },
@@ -17,7 +18,7 @@ const OP_SYMBOL = { add: '+', sub: '\u2212', mul: '\u00D7', div: '\u00F7' };
 export const MathNode = createNode({
   kind: 'transform',
   title: 'Math',
-  icon: 'fx',
+  icon: NODE_ICONS.math,
   subtitle: ({ data }) => `a ${OP_SYMBOL[data.op] || '?'} b`,
   defaults: { op: 'add' },
   handles: ({ id }) => [

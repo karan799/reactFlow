@@ -1,54 +1,75 @@
-import { ConfigProvider, Layout, theme } from 'antd';
+import { ConfigProvider, Layout, Space, theme, Typography } from 'antd';
 import { PipelineToolbar } from './toolbar';
 import { PipelineUI } from './ui';
 import { SubmitButton } from './submit';
 import { NODE_TOKENS } from './nodes/nodeStyles';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Sider } = Layout;
 
 const antdTheme = {
   algorithm: theme.defaultAlgorithm,
   token: {
-    colorPrimary: '#1C2536',
+    colorPrimary: '#3B82F6',
     colorBgBase: '#FFFFFF',
     colorTextBase: NODE_TOKENS.textColor,
     borderRadius: 8,
     fontFamily: NODE_TOKENS.fontFamily,
+  },
+  components: {
+    Layout: {
+      headerBg: '#0F172A',
+      siderBg: NODE_TOKENS.paletteBackground,
+    },
   },
 };
 
 function App() {
   return (
     <ConfigProvider theme={antdTheme}>
-      <Layout style={{ minHeight: '100vh', background: '#F4F5F7' }}>
+      <Layout style={{ minHeight: '100vh', background: NODE_TOKENS.canvasBackground }}>
         <Header
           style={{
-            background: '#1C2536',
-            color: '#fff',
-            padding: '0 24px',
+            padding: '0 20px',
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
+            justifyContent: 'space-between',
+            borderBottom: '1px solid rgba(148, 163, 184, 0.16)',
           }}
         >
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 6,
-              background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)',
-            }}
-          />
-          <span style={{ fontSize: 16, fontWeight: 600 }}>VectorShift Pipeline</span>
+          <Space size={12} align="center">
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 7,
+                background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)',
+                boxShadow: '0 0 0 1px rgba(255,255,255,0.08)',
+              }}
+            />
+            <Typography.Text style={{ color: '#fff', fontSize: 15, fontWeight: 600 }}>
+              VectorShift
+            </Typography.Text>
+            <Typography.Text style={{ color: NODE_TOKENS.invertedMutedColor, fontSize: 12 }}>
+              · Pipeline Editor
+            </Typography.Text>
+          </Space>
+          <Space size={10} align="center">
+            <Typography.Text style={{ color: NODE_TOKENS.invertedMutedColor, fontSize: 12 }}>
+              Untitled pipeline
+            </Typography.Text>
+            <SubmitButton />
+          </Space>
         </Header>
-        <Content style={{ padding: 16 }}>
-          <PipelineToolbar />
-          <PipelineUI />
-          <SubmitButton />
-        </Content>
-        <Footer style={{ textAlign: 'center', background: 'transparent', color: NODE_TOKENS.mutedColor }}>
-          Frontend Technical Assessment
-        </Footer>
+
+        <Layout>
+          <Sider width={260} style={{ borderRight: '1px solid rgba(148, 163, 184, 0.12)' }}>
+            <PipelineToolbar />
+          </Sider>
+
+          <Content style={{ padding: 16 }}>
+            <PipelineUI />
+          </Content>
+        </Layout>
       </Layout>
     </ConfigProvider>
   );

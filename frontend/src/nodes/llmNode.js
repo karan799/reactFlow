@@ -1,12 +1,13 @@
 // llmNode.js
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const LLMNode = createNode({
   kind: 'llm',
   title: 'LLM',
   subtitle: 'Large language model',
-  icon: 'AI',
+  icon: NODE_ICONS.llm,
   handles: ({ id }) => [
     { id: `${id}-system`, type: 'target', label: 'system' },
     { id: `${id}-prompt`, type: 'target', label: 'prompt' },

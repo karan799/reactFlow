@@ -1,16 +1,15 @@
 // submit.js
 //
-// Part 4 will wire this button to POST nodes/edges to /pipelines/parse.
-// For now we present the antd Button so the chrome is in place.
+// Primary CTA shown in the top header. Part 4 will wire this to POST the
+// nodes + edges to the FastAPI backend and surface the response.
 
 import { Button } from 'antd';
+import { PlayCircleFilled } from '@ant-design/icons';
 
 export const SubmitButton = () => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
-      <Button type="primary" size="large">
-        Submit Pipeline
-      </Button>
-    </div>
+    <Button type="primary" icon={<PlayCircleFilled />} size="middle">
+      Run Pipeline
+    </Button>
   );
 };

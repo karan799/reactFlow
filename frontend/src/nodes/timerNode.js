@@ -4,11 +4,12 @@
 // Demonstrates number + unit combo and a single in/out handle pair.
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const TimerNode = createNode({
   kind: 'control',
   title: 'Delay',
-  icon: 'T',
+  icon: NODE_ICONS.timer,
   subtitle: ({ data }) => `wait ${data.duration} ${data.unit}`,
   defaults: { duration: 1, unit: 's' },
   handles: ({ id }) => [

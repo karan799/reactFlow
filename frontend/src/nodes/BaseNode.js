@@ -1,26 +1,28 @@
 // BaseNode.js
 //
-// The visual shell for every node. Responsibilities:
-//   1. Render a consistent header (accent stripe + icon + title + subtitle).
-//   2. Render a body slot for fields / custom children.
-//   3. Render handles. When multiple handles sit on the same side, they are
-//      automatically distributed vertically so configs don't have to do the
-//      "top: 33%" math the original LLM node did by hand.
-//
-// BaseNode is presentational only. It knows nothing about the store.
+// Presentational shell for every node. Knows nothing about the store.
+// Responsibilities:
+//   1. Consistent header (accent bar + icon badge + title + subtitle)
+//   2. Body slot for fields / custom children
+//   3. Handle rendering with automatic vertical distribution
+//   4. Visual states: idle / hover / selected (passed by React Flow)
 
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { Handle, Position } from 'reactflow';
-import { NODE_TOKENS, accentFor } from './nodeStyles';
+import { NODE_TOKENS, accentFor, accentSoft } from './nodeStyles';
 
 const DEFAULT_WIDTH = 240;
 
-// Group handles by side, then assign vertical offsets where not explicitly set.
+// Distribute multiple handles on the same side evenly so configs never have
+// to compute `top: 33%` etc. by hand.
 const layoutHandles = (handles) => {
-  const groups = { [Position.Left]: [], [Position.Right]: [], [Position.Top]: [], [Position.Bottom]: [] };
-  handles.forEach((h, idx) => {
+  const groups = {
+    [Position.Left]: [], [Position.Right]: [],
+    [Position.Top]: [],  [Position.Bottom]: [],
+  };
+  handles.forEach((h) => {
     const side = h.position || (h.type === 'target' ? Position.Left : Position.Right);
-    groups[side].push({ ...h, position: side, _idx: idx });
+    groups[side].push({ ...h, position: side });
   });
 
   const out = [];
@@ -52,9 +54,9 @@ const HandleLabel = ({ side, label }) => {
     whiteSpace: 'nowrap',
   };
   const sideStyle = side === Position.Left
-    ? { left: 10 }
+    ? { left: 12 }
     : side === Position.Right
-      ? { right: 10 }
+      ? { right: 12 }
       : {};
   return <span style={{ ...base, ...sideStyle }}>{label}</span>;
 };
@@ -67,64 +69,101 @@ const BaseNodeImpl = ({
   icon,
   width = DEFAULT_WIDTH,
   handles = [],
+  selected = false,
   children,
 }) => {
   const accent = accentFor(kind);
+  const [hover, setHover] = useState(false);
   const positioned = useMemo(() => layoutHandles(handles), [handles]);
+
+  const shadow = selected
+    ? NODE_TOKENS.shadowSelected
+    : hover
+      ? NODE_TOKENS.shadowHover
+      : NODE_TOKENS.shadow;
+
+  const borderColor = selected ? accent : NODE_TOKENS.borderColor;
 
   return (
     <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       style={{
         width,
         background: NODE_TOKENS.background,
-        border: `1px solid ${NODE_TOKENS.borderColor}`,
+        border: `1px solid ${borderColor}`,
         borderRadius: NODE_TOKENS.radius,
-        boxShadow: NODE_TOKENS.shadow,
+        boxShadow: shadow,
         fontFamily: NODE_TOKENS.fontFamily,
         color: NODE_TOKENS.textColor,
         overflow: 'hidden',
         position: 'relative',
+        transition: NODE_TOKENS.transition,
       }}
     >
+      {/* Accent top stripe (subtle product signature) */}
+      <div style={{ height: 3, background: accent, opacity: 0.9 }} />
+
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 8,
-          padding: '8px 12px',
+          gap: 10,
+          padding: '10px 12px',
           background: NODE_TOKENS.headerBackground,
           borderBottom: `1px solid ${NODE_TOKENS.borderColor}`,
-          borderLeft: `3px solid ${accent}`,
         }}
       >
         {icon && (
           <span
             aria-hidden
             style={{
-              width: 20,
-              height: 20,
-              borderRadius: 4,
-              background: `${accent}22`,
+              width: 24,
+              height: 24,
+              borderRadius: 6,
+              background: accentSoft(kind),
               color: accent,
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 12,
-              fontWeight: 600,
+              fontSize: 13,
+              flexShrink: 0,
             }}
           >
             {icon}
           </span>
         )}
-        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-          <span style={{ fontSize: 13, fontWeight: 600 }}>{title}</span>
+        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, flex: 1, minWidth: 0 }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: NODE_TOKENS.textColor }}>{title}</span>
           {subtitle && (
-            <span style={{ fontSize: 10, color: NODE_TOKENS.mutedColor }}>{subtitle}</span>
+            <span
+              style={{
+                fontSize: 11,
+                color: NODE_TOKENS.mutedColor,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {subtitle}
+            </span>
           )}
         </div>
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 500,
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+            color: accent,
+            opacity: 0.8,
+          }}
+        >
+          #{String(id).split('-').pop()}
+        </span>
       </div>
 
-      <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
         {children}
       </div>
 

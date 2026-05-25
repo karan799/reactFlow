@@ -5,11 +5,12 @@
 // auto-resize and variable-driven handles without rewriting the node itself.
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const TextNode = createNode({
   kind: 'text',
   title: 'Text',
-  icon: 'T',
+  icon: NODE_ICONS.text,
   defaults: { text: '{{input}}' },
   handles: ({ id }) => [
     { id: `${id}-output`, type: 'source' },

@@ -1,11 +1,12 @@
 // inputNode.js
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const InputNode = createNode({
   kind: 'input',
   title: 'Input',
-  icon: 'IN',
+  icon: NODE_ICONS.customInput,
   defaults: {
     inputName: ({ id }) => id.replace('customInput-', 'input_'),
     inputType: 'Text',

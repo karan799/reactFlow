@@ -6,11 +6,12 @@
 import { createNode } from './createNode';
 import { TextField } from './fields';
 import { NODE_TOKENS } from './nodeStyles';
+import { NODE_ICONS } from './icons';
 
 export const ImageNode = createNode({
   kind: 'media',
   title: 'Image',
-  icon: 'IMG',
+  icon: NODE_ICONS.image,
   defaults: {
     url: 'https://picsum.photos/seed/vectorshift/240/120',
     alt: 'preview',

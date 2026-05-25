@@ -4,11 +4,12 @@
 // text field (url). Demonstrates wider layout via `width`.
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const ApiNode = createNode({
   kind: 'integration',
   title: 'API Call',
-  icon: 'API',
+  icon: NODE_ICONS.api,
   subtitle: ({ data }) => `${data.method} ${data.url || '\u2014'}`,
   width: 280,
   defaults: {

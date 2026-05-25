@@ -4,11 +4,12 @@
 // otherwise we hide it. Proves `fields` can be a function of data.
 
 import { createNode } from './createNode';
+import { NODE_ICONS } from './icons';
 
 export const FilterNode = createNode({
   kind: 'transform',
   title: 'Filter',
-  icon: 'F',
+  icon: NODE_ICONS.filter,
   subtitle: ({ data }) => `mode: ${data.mode}`,
   defaults: { mode: 'contains', pattern: '', flags: 'i' },
   handles: ({ id }) => [

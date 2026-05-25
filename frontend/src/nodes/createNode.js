@@ -44,9 +44,9 @@ export const createNode = (config) => {
     render, // optional escape hatch: (ctx) => ReactNode for full custom bodies
   } = config;
 
-  const NodeComponent = ({ id, data }) => {
+  const NodeComponent = ({ id, data, selected }) => {
     const [view, setField] = useNodeData(id, data, defaults);
-    const ctx = { id, data: view, setField };
+    const ctx = { id, data: view, setField, selected };
 
     const resolvedHandles = resolve(handles, ctx);
     const resolvedFields = resolve(fields, ctx);
@@ -61,6 +61,7 @@ export const createNode = (config) => {
         icon={resolve(icon, ctx)}
         width={resolve(width, ctx)}
         handles={resolvedHandles}
+        selected={selected}
       >
         {render
           ? render(ctx)
