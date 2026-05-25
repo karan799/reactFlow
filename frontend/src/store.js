@@ -46,9 +46,22 @@ export const useStore = create((set, get) => ({
           if (node.id === nodeId) {
             node.data = { ...node.data, [fieldName]: fieldValue };
           }
-  
+
           return node;
         }),
       });
+    },
+    // Generic dynamic-handle support: drop any edges that reference handles
+    // on `nodeId` which are no longer in `validHandleIds`. Used by nodes
+    // whose handles are derived from data (e.g. the Text node's {{vars}}).
+    syncHandles: (nodeId, validHandleIds) => {
+      const valid = new Set(validHandleIds);
+      const before = get().edges;
+      const after = before.filter((e) => {
+        if (e.source === nodeId && e.sourceHandle && !valid.has(e.sourceHandle)) return false;
+        if (e.target === nodeId && e.targetHandle && !valid.has(e.targetHandle)) return false;
+        return true;
+      });
+      if (after.length !== before.length) set({ edges: after });
     },
   }));

@@ -25,9 +25,11 @@
 // gives Part 3 the hook it needs to derive Text-node handles from `{{var}}`s
 // without any special-casing here.
 
+import { useEffect, useMemo } from 'react';
 import { BaseNode } from './BaseNode';
 import { FIELD_COMPONENTS } from './fields';
 import { useNodeData } from './useNodeData';
+import { useStore } from '../store';
 
 const resolve = (val, ctx) => (typeof val === 'function' ? val(ctx) : val);
 
@@ -51,6 +53,19 @@ export const createNode = (config) => {
     const resolvedHandles = resolve(handles, ctx);
     const resolvedFields = resolve(fields, ctx);
     const resolvedSubtitle = resolve(subtitle, ctx);
+
+    // Dynamic-handle support: whenever the set of handle ids changes (e.g.
+    // the Text node's {{vars}} are renamed or removed), drop any edges that
+    // referenced the now-stale handles. Generic — every dynamic-handle node
+    // gets this behaviour for free.
+    const handleIdsKey = useMemo(
+      () => resolvedHandles.map((h) => h.id).join('|'),
+      [resolvedHandles]
+    );
+    const syncHandles = useStore((s) => s.syncHandles);
+    useEffect(() => {
+      syncHandles(id, handleIdsKey ? handleIdsKey.split('|') : []);
+    }, [id, handleIdsKey, syncHandles]);
 
     return (
       <BaseNode
@@ -84,6 +99,7 @@ export const createNode = (config) => {
                   options={field.options}
                   placeholder={field.placeholder}
                   rows={field.rows}
+                  maxRows={field.maxRows}
                   min={field.min}
                   max={field.max}
                   step={field.step}

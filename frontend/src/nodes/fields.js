@@ -88,16 +88,23 @@ export const SelectField = ({ id, label, value, onChange, options = [] }) => {
   );
 };
 
-export const TextareaField = ({ id, label, value = '', onChange, rows = 3, placeholder }) => (
+export const TextareaField = ({
+  id,
+  label,
+  value = '',
+  onChange,
+  rows = 3,
+  maxRows,
+  placeholder,
+}) => (
   <Label label={label} htmlFor={id}>
     {wrap(
       <TextArea
         id={id}
-        rows={rows}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        autoSize={{ minRows: rows, maxRows: rows + 4 }}
+        autoSize={{ minRows: rows, maxRows: maxRows ?? rows + 4 }}
       />
     )}
   </Label>
