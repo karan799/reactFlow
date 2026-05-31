@@ -63,6 +63,7 @@ export const createNode = (config) => {
       [resolvedHandles]
     );
     const syncHandles = useStore((s) => s.syncHandles);
+    const deleteNode = useStore((s) => s.deleteNode);
     useEffect(() => {
       syncHandles(id, handleIdsKey ? handleIdsKey.split('|') : []);
     }, [id, handleIdsKey, syncHandles]);
@@ -77,6 +78,7 @@ export const createNode = (config) => {
         width={resolve(width, ctx)}
         handles={resolvedHandles}
         selected={selected}
+        onDelete={() => deleteNode(id)}
       >
         {render
           ? render(ctx)

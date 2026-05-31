@@ -64,4 +64,10 @@ export const useStore = create((set, get) => ({
       });
       if (after.length !== before.length) set({ edges: after });
     },
+    deleteNode: (nodeId) => {
+      set({
+        nodes: get().nodes.filter((n) => n.id !== nodeId),
+        edges: get().edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
+      });
+    },
   }));

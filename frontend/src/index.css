@@ -32,6 +32,7 @@ code {
 .react-flow {
   width: 100%;
   height: 100%;
+  background-color: #F4F5F7;
 }
 .react-flow__handle {
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -58,6 +59,37 @@ code {
   background: #fff !important;
 }
 
+/* Node field inputs: visible text + caret on white node surfaces */
+.react-flow .ant-input,
+.react-flow textarea.ant-input,
+.react-flow .ant-input-number,
+.react-flow .ant-input-number-input,
+.react-flow .ant-select-selector {
+  color: #1C2536 !important;
+  caret-color: #1C2536;
+  background-color: #FFFFFF !important;
+}
+.react-flow .ant-input::placeholder,
+.react-flow textarea.ant-input::placeholder {
+  color: #9CA3AF;
+}
+.react-flow .ant-input-affix-wrapper {
+  color: #1C2536;
+  background-color: #FFFFFF !important;
+}
+.react-flow .ant-input-affix-wrapper input {
+  color: #1C2536 !important;
+  caret-color: #1C2536;
+  background-color: transparent !important;
+}
+.react-flow .ant-select-selection-item,
+.react-flow .ant-select-selection-placeholder {
+  color: #1C2536 !important;
+}
+.react-flow .ant-select-selection-placeholder {
+  color: #9CA3AF !important;
+}
+
 /* ----- Palette draggable items: shared hover lift ----- */
 .palette-item {
   transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
@@ -70,6 +102,9 @@ code {
 .palette-item:active { cursor: grabbing; }
 
 /* Antd Collapse on dark sidebar: invert text colours */
+.palette {
+  color-scheme: dark only;
+}
 .palette .ant-collapse {
   background: transparent;
   border: none;

@@ -1,0 +1,57 @@
+/* Loaded after reactflow/dist/style.css.
+   Use the native grab/grabbing hand; force light color-scheme so Windows dark
+   mode does not swap in a white system cursor on the light canvas. */
+
+.pipeline-canvas,
+.pipeline-canvas .react-flow,
+.pipeline-canvas .react-flow__renderer,
+.pipeline-canvas .react-flow__pane,
+.pipeline-canvas .react-flow__viewport,
+.pipeline-canvas .react-flow__background,
+.pipeline-canvas .react-flow__node,
+.pipeline-canvas .react-flow__edge,
+.pipeline-canvas .react-flow__handle {
+  color-scheme: light only;
+}
+
+.react-flow__pane {
+  cursor: grab;
+}
+
+.react-flow__pane.selection {
+  cursor: default;
+}
+
+.react-flow__pane.dragging,
+.react-flow.dragging .react-flow__pane {
+  cursor: grabbing;
+}
+
+.react-flow__node {
+  cursor: move;
+}
+
+.react-flow__node .nodrag,
+.react-flow__node .nodrag * {
+  cursor: text;
+}
+
+.react-flow__edge {
+  cursor: pointer;
+}
+
+.react-flow__handle {
+  cursor: crosshair;
+}
+
+.react-flow__controls button,
+.react-flow__minimap {
+  cursor: pointer;
+}
+
+.pipeline-canvas:fullscreen,
+.pipeline-canvas--fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: #F4F5F7;
+}

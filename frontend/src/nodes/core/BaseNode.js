@@ -9,6 +9,7 @@
 
 import { memo, useMemo, useState } from 'react';
 import { Handle, Position } from 'reactflow';
+import { CloseOutlined } from '@ant-design/icons';
 import { NODE_TOKENS, accentFor, accentSoft } from './nodeStyles';
 
 const DEFAULT_WIDTH = 240;
@@ -45,19 +46,28 @@ const HandleLabel = ({ side, label }) => {
   if (!label) return null;
   const base = {
     position: 'absolute',
+    top: 0,
     fontSize: 10,
     color: NODE_TOKENS.mutedColor,
     fontFamily: NODE_TOKENS.fontFamily,
     pointerEvents: 'none',
-    transform: 'translateY(-50%)',
-    top: '50%',
     whiteSpace: 'nowrap',
+    lineHeight: 1,
   };
-  const sideStyle = side === Position.Left
-    ? { left: 12 }
-    : side === Position.Right
-      ? { right: 12 }
-      : {};
+  const sideStyle =
+    side === Position.Left
+      ? {
+          left: 0,
+          transform: 'translate(calc(-100% - 10px), -50%)',
+          textAlign: 'right',
+        }
+      : side === Position.Right
+        ? {
+            right: 0,
+            transform: 'translate(calc(100% + 10px), -50%)',
+            textAlign: 'left',
+          }
+        : {};
   return <span style={{ ...base, ...sideStyle }}>{label}</span>;
 };
 
@@ -70,6 +80,7 @@ const BaseNodeImpl = ({
   width = DEFAULT_WIDTH,
   handles = [],
   selected = false,
+  onDelete,
   children,
 }) => {
   const accent = accentFor(kind);
@@ -96,11 +107,12 @@ const BaseNodeImpl = ({
         boxShadow: shadow,
         fontFamily: NODE_TOKENS.fontFamily,
         color: NODE_TOKENS.textColor,
-        overflow: 'hidden',
+        overflow: 'visible',
         position: 'relative',
         transition: NODE_TOKENS.transition,
       }}
     >
+      <div style={{ borderRadius: NODE_TOKENS.radius, overflow: 'hidden' }}>
       {/* Accent top stripe (subtle product signature) */}
       <div style={{ height: 3, background: accent, opacity: 0.9 }} />
 
@@ -149,22 +161,55 @@ const BaseNodeImpl = ({
             </span>
           )}
         </div>
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 500,
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-            color: accent,
-            opacity: 0.8,
-          }}
-        >
-          #{String(id).split('-').pop()}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          {onDelete && (hover || selected) && (
+            <button
+              type="button"
+              className="nodrag"
+              aria-label="Delete node"
+              title="Delete node"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 22,
+                height: 22,
+                padding: 0,
+                border: 'none',
+                borderRadius: 6,
+                background: 'rgba(239, 68, 68, 0.08)',
+                color: '#EF4444',
+                cursor: 'pointer',
+                flexShrink: 0,
+              }}
+            >
+              <CloseOutlined style={{ fontSize: 11 }} />
+            </button>
+          )}
+          <span
+            style={{
+              fontSize: 10,
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.04em',
+              color: accent,
+              opacity: 0.8,
+            }}
+          >
+            #{String(id).split('-').pop()}
+          </span>
+        </div>
       </div>
 
       <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
         {children}
+      </div>
       </div>
 
       {positioned.map((h) => (
@@ -185,7 +230,18 @@ const BaseNodeImpl = ({
 
       {positioned.map((h) =>
         h.label ? (
-          <div key={`${h.id}-label-wrap`} style={{ position: 'absolute', top: h.style.top, left: 0, right: 0 }}>
+          <div
+            key={`${h.id}-label-wrap`}
+            style={{
+              position: 'absolute',
+              top: h.style.top,
+              left: h.position === Position.Left ? 0 : undefined,
+              right: h.position === Position.Right ? 0 : undefined,
+              height: 0,
+              width: 0,
+              overflow: 'visible',
+            }}
+          >
             <HandleLabel side={h.position} label={h.label} />
           </div>
         ) : null

@@ -3,7 +3,7 @@
 // The pipeline canvas. Wraps React Flow with theming, a status panel that
 // reports node/edge counts, and styled defaults for edges + minimap.
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactFlow, {
   Controls,
   Background,
@@ -12,12 +12,15 @@ import ReactFlow, {
   MarkerType,
   Panel,
 } from 'reactflow';
+import { Button, Tooltip } from 'antd';
+import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 import { NODE_TYPES, NODE_REGISTRY } from './nodes/registry';
 import { accentFor, NODE_TOKENS } from './nodes/core/nodeStyles';
 
 import 'reactflow/dist/style.css';
+import './canvas.css';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
@@ -104,6 +107,7 @@ const EmptyState = () => (
 export const PipelineUI = () => {
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const {
     nodes,
     edges,
@@ -147,6 +151,46 @@ export const PipelineUI = () => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const el = reactFlowWrapper.current;
+      const active =
+        document.fullscreenElement === el ||
+        document.webkitFullscreenElement === el;
+      setIsFullscreen(active);
+      window.dispatchEvent(new Event('resize'));
+    };
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = useCallback(async () => {
+    const el = reactFlowWrapper.current;
+    if (!el) return;
+
+    const isActive =
+      document.fullscreenElement === el ||
+      document.webkitFullscreenElement === el;
+
+    try {
+      if (isActive) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      } else if (el.requestFullscreen) {
+        await el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        await el.webkitRequestFullscreen();
+      }
+    } catch {
+      // Fullscreen may be blocked by the browser; fail silently.
+    }
+  }, []);
+
   const minimapNodeColor = (n) => {
     const entry = NODE_REGISTRY[n.type];
     return entry ? accentFor(entry.kind) : '#94A3B8';
@@ -155,16 +199,18 @@ export const PipelineUI = () => {
   return (
     <div
       ref={reactFlowWrapper}
+      className={`pipeline-canvas${isFullscreen ? ' pipeline-canvas--fullscreen' : ''}`}
       style={{
         position: 'relative',
         width: '100%',
         flex: 1,
         minHeight: 0,
-        background: NODE_TOKENS.background,
-        border: `1px solid ${NODE_TOKENS.borderColor}`,
-        borderRadius: 12,
+        colorScheme: 'light only',
+        background: NODE_TOKENS.canvasBackground,
+        border: isFullscreen ? 'none' : `1px solid ${NODE_TOKENS.borderColor}`,
+        borderRadius: isFullscreen ? 0 : 12,
         overflow: 'hidden',
-        boxShadow: NODE_TOKENS.shadow,
+        boxShadow: isFullscreen ? 'none' : NODE_TOKENS.shadow,
       }}
     >
       <ReactFlow
@@ -183,7 +229,7 @@ export const PipelineUI = () => {
         defaultEdgeOptions={defaultEdgeOptions}
         connectionLineStyle={connectionLineStyle}
         connectionLineType="smoothstep"
-        fitView
+        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
       >
         <Background
           variant={BackgroundVariant.Dots}
@@ -199,6 +245,22 @@ export const PipelineUI = () => {
           pannable
           zoomable
         />
+        <Panel position="top-left">
+          <Tooltip title={isFullscreen ? 'Exit full screen' : 'Full screen'}>
+            <Button
+              type="default"
+              size="small"
+              icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? 'Exit full screen' : 'Enter full screen'}
+              style={{
+                background: '#FFFFFF',
+                borderColor: NODE_TOKENS.borderColor,
+                boxShadow: NODE_TOKENS.shadow,
+              }}
+            />
+          </Tooltip>
+        </Panel>
         <Panel position="top-right">
           <div style={{ display: 'flex', gap: 8 }}>
             <StatusPill label="nodes" value={nodes.length} accent="#3B82F6" />
