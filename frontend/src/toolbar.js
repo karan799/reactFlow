@@ -10,7 +10,7 @@ import { Collapse, Input, Tooltip, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { DraggableNode } from './draggableNode';
 import { groupedToolbarItems, CATEGORY_ORDER } from './nodes/registry';
-import { NODE_TOKENS } from './nodes/nodeStyles';
+import { NODE_TOKENS } from './nodes/core/nodeStyles';
 
 export const PipelineToolbar = () => {
   const [query, setQuery] = useState('');
@@ -70,7 +70,7 @@ export const PipelineToolbar = () => {
     }));
 
   return (
-    <div className="palette" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="palette" style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
       <div style={{ padding: 12, borderBottom: '1px solid rgba(148, 163, 184, 0.12)' }}>
         <div
           style={{
@@ -93,7 +93,7 @@ export const PipelineToolbar = () => {
         />
       </div>
 
-      <div style={{ overflowY: 'auto', flex: 1 }}>
+      <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
         {hasResults ? (
           <Collapse
             ghost

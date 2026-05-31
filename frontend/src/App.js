@@ -2,7 +2,7 @@ import { ConfigProvider, Layout, Space, theme, Typography } from 'antd';
 import { PipelineToolbar } from './toolbar';
 import { PipelineUI } from './ui';
 import { SubmitButton } from './submit';
-import { NODE_TOKENS } from './nodes/nodeStyles';
+import { NODE_TOKENS } from './nodes/core/nodeStyles';
 
 const { Header, Content, Sider } = Layout;
 
@@ -26,7 +26,13 @@ const antdTheme = {
 function App() {
   return (
     <ConfigProvider theme={antdTheme}>
-      <Layout style={{ minHeight: '100vh', background: NODE_TOKENS.canvasBackground }}>
+      <Layout
+        style={{
+          height: '100vh',
+          overflow: 'hidden',
+          background: NODE_TOKENS.canvasBackground,
+        }}
+      >
         <Header
           style={{
             padding: '0 20px',
@@ -61,12 +67,27 @@ function App() {
           </Space>
         </Header>
 
-        <Layout>
-          <Sider width={260} style={{ borderRight: '1px solid rgba(148, 163, 184, 0.12)' }}>
+        <Layout style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+          <Sider
+            width={260}
+            style={{
+              borderRight: '1px solid rgba(148, 163, 184, 0.12)',
+              overflow: 'hidden',
+              height: '100%',
+            }}
+          >
             <PipelineToolbar />
           </Sider>
 
-          <Content style={{ padding: 16 }}>
+          <Content
+            style={{
+              padding: 16,
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 0,
+            }}
+          >
             <PipelineUI />
           </Content>
         </Layout>

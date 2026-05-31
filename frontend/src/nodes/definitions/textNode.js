@@ -12,10 +12,10 @@
 // createNode -> store.syncHandles, so nothing node-specific to do here.
 
 import { Position } from 'reactflow';
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
-import { TextareaField } from './fields';
-import { parseVariables, measureLongestLineWidth } from './textParsing';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
+import { TextareaField } from '../core/fields';
+import { parseVariables, measureLongestLineWidth } from '../core/textParsing';
 
 const MIN_WIDTH = 240;
 const MAX_WIDTH = 480;

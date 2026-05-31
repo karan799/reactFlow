@@ -3,10 +3,10 @@
 // Custom-render demo: the body is supplied via the `render` escape hatch so
 // we can show a live preview thumbnail under the URL field.
 
-import { createNode } from './createNode';
-import { TextField } from './fields';
-import { NODE_TOKENS } from './nodeStyles';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { TextField } from '../core/fields';
+import { NODE_TOKENS } from '../core/nodeStyles';
+import { NODE_ICONS } from '../core/icons';
 
 export const ImageNode = createNode({
   kind: 'media',

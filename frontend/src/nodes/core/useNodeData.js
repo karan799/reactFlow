@@ -9,7 +9,7 @@
 // per-instance defaults (e.g. "input_1", "input_2") are easy.
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useStore } from '../store';
+import { useStore } from '../../store';
 
 const resolveDefault = (value, ctx) =>
   typeof value === 'function' ? value(ctx) : value;

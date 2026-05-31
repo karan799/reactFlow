@@ -29,7 +29,7 @@ import { useEffect, useMemo } from 'react';
 import { BaseNode } from './BaseNode';
 import { FIELD_COMPONENTS } from './fields';
 import { useNodeData } from './useNodeData';
-import { useStore } from '../store';
+import { useStore } from '../../store';
 
 const resolve = (val, ctx) => (typeof val === 'function' ? val(ctx) : val);
 

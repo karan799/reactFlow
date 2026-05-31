@@ -3,8 +3,8 @@
 // Two-input arithmetic node. Demonstrates: multiple target handles on the
 // same side (auto-distributed), a select-driven dynamic subtitle.
 
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
 
 const OPS = [
   { value: 'add', label: '+ Add' },

@@ -3,8 +3,8 @@
 // Conditional field demo: when mode === 'regex' we show a "Flags" field,
 // otherwise we hide it. Proves `fields` can be a function of data.
 
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
 
 export const FilterNode = createNode({
   kind: 'transform',

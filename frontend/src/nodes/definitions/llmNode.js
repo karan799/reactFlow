@@ -1,7 +1,7 @@
 // llmNode.js
 
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
 
 export const LLMNode = createNode({
   kind: 'llm',

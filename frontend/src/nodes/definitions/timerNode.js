@@ -3,8 +3,8 @@
 // Pass-through control node — adds a delay before propagating its input.
 // Demonstrates number + unit combo and a single in/out handle pair.
 
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
 
 export const TimerNode = createNode({
   kind: 'control',

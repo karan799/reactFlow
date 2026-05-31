@@ -4,16 +4,16 @@
 // entry here. Drives both the React-Flow nodeTypes map and the categorized
 // palette in the sidebar.
 
-import { InputNode } from './inputNode';
-import { OutputNode } from './outputNode';
-import { LLMNode } from './llmNode';
-import { TextNode } from './textNode';
-import { MathNode } from './mathNode';
-import { FilterNode } from './filterNode';
-import { ApiNode } from './apiNode';
-import { ImageNode } from './imageNode';
-import { TimerNode } from './timerNode';
-import { NODE_ICONS } from './icons';
+import { InputNode } from './definitions/inputNode';
+import { OutputNode } from './definitions/outputNode';
+import { LLMNode } from './definitions/llmNode';
+import { TextNode } from './definitions/textNode';
+import { MathNode } from './definitions/mathNode';
+import { FilterNode } from './definitions/filterNode';
+import { ApiNode } from './definitions/apiNode';
+import { ImageNode } from './definitions/imageNode';
+import { TimerNode } from './definitions/timerNode';
+import { NODE_ICONS } from './core/icons';
 
 /**
  * @typedef {Object} NodeRegistryEntry

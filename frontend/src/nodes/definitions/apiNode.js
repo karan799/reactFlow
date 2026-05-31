@@ -3,8 +3,8 @@
 // Integration node with a textarea (headers JSON), a select (method) and a
 // text field (url). Demonstrates wider layout via `width`.
 
-import { createNode } from './createNode';
-import { NODE_ICONS } from './icons';
+import { createNode } from '../core/createNode';
+import { NODE_ICONS } from '../core/icons';
 
 export const ApiNode = createNode({
   kind: 'integration',

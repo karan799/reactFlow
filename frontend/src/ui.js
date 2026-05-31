@@ -15,7 +15,7 @@ import ReactFlow, {
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 import { NODE_TYPES, NODE_REGISTRY } from './nodes/registry';
-import { accentFor, NODE_TOKENS } from './nodes/nodeStyles';
+import { accentFor, NODE_TOKENS } from './nodes/core/nodeStyles';
 
 import 'reactflow/dist/style.css';
 
@@ -158,7 +158,8 @@ export const PipelineUI = () => {
       style={{
         position: 'relative',
         width: '100%',
-        height: 'calc(100vh - 64px - 32px)',
+        flex: 1,
+        minHeight: 0,
         background: NODE_TOKENS.background,
         border: `1px solid ${NODE_TOKENS.borderColor}`,
         borderRadius: 12,

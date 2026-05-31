@@ -3,7 +3,7 @@
 // A draggable palette item. Visual: dark card row with a tinted icon badge
 // and a left accent stripe matching the node's kind.
 
-import { accentFor, accentSoft, NODE_TOKENS } from './nodes/nodeStyles';
+import { accentFor, accentSoft, NODE_TOKENS } from './nodes/core/nodeStyles';
 
 export const DraggableNode = ({ type, label, kind, icon }) => {
   const accent = accentFor(kind);
